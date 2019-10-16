@@ -34,7 +34,7 @@ use kornrunner\Keccak;
 use kornrunner\Solidity;
 use Elliptic\EC;
 
-$version = '1.18.1279';
+$version = '1.18.1165';
 
 // rounding mode
 const TRUNCATE = 0;
@@ -53,7 +53,7 @@ const PAD_WITH_ZERO = 1;
 
 class Exchange {
 
-    const VERSION = '1.18.1279';
+    const VERSION = '1.18.1165';
 
     public static $eth_units = array (
         'wei'        => '1',
@@ -106,7 +106,6 @@ class Exchange {
         'bitkk',
         'bitlish',
         'bitmart',
-        'bitmax',
         'bitmex',
         'bitso',
         'bitstamp',
@@ -124,6 +123,7 @@ class Exchange {
         'btctradeua',
         'btcturk',
         'buda',
+        'bxinth',
         'cex',
         'chilebit',
         'cobinhood',
@@ -145,10 +145,13 @@ class Exchange {
         'coolcoin',
         'coss',
         'crex24',
+        'crypton',
         'deribit',
         'digifinex',
         'dsx',
         'dx',
+        'eterbase',
+        'ethfinex',
         'exmo',
         'exx',
         'fcoin',
@@ -157,6 +160,7 @@ class Exchange {
         'foxbit',
         'fybse',
         'gateio',
+        'gdax',
         'gemini',
         'hitbtc',
         'hitbtc2',
@@ -183,6 +187,7 @@ class Exchange {
         'mercado',
         'mixcoins',
         'negociecoins',
+        'nova',
         'oceanex',
         'okcoincny',
         'okcoinusd',
@@ -202,7 +207,6 @@ class Exchange {
         'vaultoro',
         'vbtc',
         'virwox',
-        'whitebit',
         'xbtce',
         'yobit',
         'zaif',
@@ -674,6 +678,13 @@ class Exchange {
             $time += (int) str_pad($match['milliseconds'], 3, '0', STR_PAD_RIGHT);
         }
         return $time;
+    }
+
+    public static function rfc2616($timestamp) {
+        if (!$timestamp) {
+            $timestamp = $this->milliseconds();
+        }
+        return gmdate('D, d M Y H:i:s T', (int) round($timestamp / 1000));
     }
 
     public static function dmy($timestamp, $infix = '-') {
@@ -2384,7 +2395,7 @@ class Exchange {
         $nonfiltered = get_object_vars($this);
         $filtered = array();
         foreach ($nonfiltered as $key => $value) {
-            if ((strpos($key, 'has') !== false) && ($key !== 'has')) {
+            if ((strpos($key, 'has') !== false) && (key !== 'has')) {
                 $filtered[$key] = $value;
             }
         }

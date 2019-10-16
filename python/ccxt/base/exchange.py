@@ -4,7 +4,7 @@
 
 # -----------------------------------------------------------------------------
 
-__version__ = '1.18.1279'
+__version__ = '1.18.1165'
 
 # -----------------------------------------------------------------------------
 
@@ -36,7 +36,7 @@ from cryptography.hazmat.primitives.serialization import load_pem_private_key
 # -----------------------------------------------------------------------------
 
 # ecdsa signing
-from ccxt.static_dependencies import ecdsa
+from static_dependencies import ecdsa
 
 # -----------------------------------------------------------------------------
 
@@ -74,6 +74,8 @@ import time
 import uuid
 import zlib
 from decimal import Decimal
+from time import mktime
+from wsgiref.handlers import format_date_time
 
 # -----------------------------------------------------------------------------
 
@@ -1828,7 +1830,7 @@ class Exchange(object):
         return ['address' if self.web3.isAddress(value) else 'uint256' for value in array]
 
     def solidityValues(self, array):
-        return [self.web3.toChecksumAddress(value) if self.web3.isAddress(value) else (int(value, 16) if str(value)[:2] == '0x' else int(value)) for value in array]
+        return [self.web3.toChecksumAddress(value) if self.web3.isAddress(value) else int(value) for value in array]
 
     def getZeroExOrderHash2(self, order):
         return self.soliditySha3([
@@ -2038,3 +2040,12 @@ class Exchange(object):
         offset = hex_to_dec(hmac_res[-1]) * 2
         otp = str(hex_to_dec(hmac_res[offset: offset + 8]) & 0x7fffffff)
         return otp[-6:]
+
+    @staticmethod
+    def rfc2616(self, timestamp=None):
+        if timestamp is None:
+            ts = datetime.datetime.now()
+        else:
+            ts = timestamp
+        stamp = mktime(ts.timetuple())
+        return format_date_time(stamp)
